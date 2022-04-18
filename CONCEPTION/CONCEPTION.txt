@@ -1,0 +1,30 @@
+CONCEPTION 
+
+Les collectables 
+La classe abstraite CollectableAreaEntity extends AreaEntity : dans le paquetage actor de area game, nous l’avons placé dans ce paquetage car comme décrit dans l'énoncé le concept d'objet collectable peut être envisagé dans tous les jeux de grilles.
+Nous avons ensuite créé un paquetage collectable dans le paquetage actor de SuperPacman. Ce paquetage contient tous les objets collectables du jeu.
+La classe abstraite SuperPacmanCollectable extends CollectableAreaEntity ; qui redéfinit quelque méthode en plus qui sont spécifique  a Super Pacman.
+Les classe Key, Bonus, Diamond et Cherry extends SuperPacmanCollectable : qui s’occupe des traitement spécifique aux différents objet (change des signaux donne des pts, etc.),
+
+Les Fantômes
+Nous avons créé un paquetage pour tous les ghost suivant la même logique que pour les collectables ils sont donc placés au même endroit.
+La classe abstrait Ghost extends MoveableEntity implements Interactor, Interactable: qui va gérer les points communs de tous les fantômes (vitesse, effrayé, interaction de base, etc.)
+écrit les interactions et les handler
+La classe Blinky extends Ghost : des fantômes lunatiques basics qui choisissent l’orientation de leur mouvement au hasard.
+La classe abstrait SmartGhost extends Ghost : des fantômes qui se déplacent de manière plus intelligente, ils choisissent un point sur la grille. De plus, ils sont conscients de ce qui se passe autour d’eux, et sont donc capables de target le SuperPacmanPlayer, une fois qu'ils ont target, ils vont suivre le PacMan.
+Les classes Inky, Pinky extends SmartGhost : Inky le prudent n’ose pas aller trop loin de sa position de refuge (position initiale). Pinky le fuyant lui ose s'aventurer plus loin mais dès qu’il est effrayé il fait tout son possible pour ne pas aller trop proche de Pacman.
+Le ghostHandler: une classe qui implemente GhostInteractionVisitor (une interface ayant comme méthode l interaction avec le superpacman), qui va faire en sorte de garder en memoire le superPacman pour qu'il reste ensuite a target ce dernier.
+
+Le Joueur 
+La classe SuperPacmanPlayer exrtends Player : dans le paquetage actor de superPacman. Cette classe gère tous les déplacements, les animations, le score, les hp (sa vie) du joueur. 
+Dans le paquetage Handler de superPacman : l’interface SuperPacmanInteractionVisitor extends RPGInteractionVisitor  qui définit toutes les interactions par défaut du joueur avec les autres éléments du jeu.
+La classe imbriquée SuperPacmanPlayerHandler implements SuperPacmanInteractionVisitor : qui redéfinit (@Override) plus spécifiquement les interactions avec les objets souhaités.
+La classe SuperPacmanSatusGUI implements Graphics : cette classe dessine les hp et le score de notre joueur en haut à gauche de la fenêtre de jeu.
+
+Les Aires
+La classe abstraite SuperPacmanArea extends Area : définit quelques méthodes de base et permet de faire le lien entre les différents acteurs du jeu.
+Les classe Level0, Level1, Level2 extends SuperpacmanArea : sont les aires de jeu concrètement utilisées, nous avons choisis de construir les Key  ainsi que les Gate directement dans les niveau et non dans le behavior premièrement pour avoir plus de visibilité, et deuxièmement car nous trouvons qu’ils constituent des objet spécifique à un niveau particulier.
+La classe SuperPacmanBehavior extends AreaBehavior implements Logic : qui gère toute l’aire de jeu. L'énumération SuperPacmanCellType donne tous les types possibles de cellules qui sont construites dans la classe imbriqué SuperPacmanCell extends Cell, qui gère toutes les spécificités des cellules.
+
+Le Jeu
+la classe SuperPacman extends RPG : qui fait le lien entre tous les objets du jeu.
